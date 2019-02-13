@@ -1,0 +1,9 @@
+.dockerignore
+.env
+./log
+./tmp
+package.lock.json
+.git
+*dockerfile*
+*docker-compose*
+./node_modules

@@ -1,0 +1,56 @@
+version: "3.7"
+
+services:
+  ###############
+  ui:
+    build: ./ui
+    image: ui:tag
+    depends_on:
+      - server
+    command: npm start
+    container_name: ui-app
+    volumes:
+     - ./ui:/app
+    ports:
+      - "5000:4200"
+    networks:
+      - front-end
+  ##############
+  server:
+    build: ./server
+    image: server:tag
+    depends_on: 
+      - db
+    container_name: server-app
+    env_file: ./server/.env
+    volumes:
+     - ./server:/usr/src/server
+    ports:
+      - "5001:3000"
+    networks:
+      - front-end
+      - back-end
+###############
+  db:
+    build: ./db
+    image: db:tag
+    container_name: mongodb
+    restart: always
+    env_file: ./db/.env
+    environment:
+     MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME} 
+     MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    ports:
+      - "27017:27017"
+    networks:
+      - back-end
+    volumes:
+      - ./db/seed_scripts/mongoSeed.json:/mongoSeed.json
+      - data-storage:/data/db
+      
+networks:
+  front-end:
+  back-end:
+
+volumes:
+  data-storage:
