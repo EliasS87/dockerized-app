@@ -1,10 +1,9 @@
-
-
- module.exports = function(app) {
+module.exports = function(app) {
     const controllers = {
-        auth: this.require('../controllers/auth'),
-    }
+        auth: require('../controllers/auth'),
+    };
 
-    app.get('/', auth, controllers);
+    app.get('/', controllers.auth.test);
+    app.get('/login', controllers.auth.login);
 
 }
